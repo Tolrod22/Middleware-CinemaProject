@@ -1,0 +1,27 @@
+mars 03, 2020 2:02:29 PM net.jini.discovery.LookupLocatorDiscovery$LocatorReg tryGetProxy
+INFOS: exception occured during unicast discovery to localhost:8065 with constraints InvocationConstraints[reqs: {}, prefs: {}]
+java.net.SocketTimeoutException: Read timed out
+	at java.net.SocketInputStream.socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at java.io.BufferedInputStream.fill(BufferedInputStream.java:246)
+	at java.io.BufferedInputStream.read1(BufferedInputStream.java:286)
+	at java.io.BufferedInputStream.read(BufferedInputStream.java:345)
+	at java.io.ObjectInputStream$PeekInputStream.read(ObjectInputStream.java:2663)
+	at java.io.ObjectInputStream$PeekInputStream.readFully(ObjectInputStream.java:2679)
+	at java.io.ObjectInputStream$BlockDataInputStream.readShort(ObjectInputStream.java:3156)
+	at java.io.ObjectInputStream.readStreamHeader(ObjectInputStream.java:862)
+	at java.io.ObjectInputStream.<init>(ObjectInputStream.java:358)
+	at com.sun.jini.discovery.DiscoveryV1.doUnicastDiscovery(DiscoveryV1.java:391)
+	at net.jini.discovery.LookupLocatorDiscovery$LocatorReg$1.performDiscovery(LookupLocatorDiscovery.java:510)
+	at com.sun.jini.discovery.internal.MultiIPDiscovery.getSingleResponse(MultiIPDiscovery.java:153)
+	at com.sun.jini.discovery.internal.MultiIPDiscovery.getResponse(MultiIPDiscovery.java:82)
+	at net.jini.discovery.LookupLocatorDiscovery$LocatorReg.doUnicastDiscovery(LookupLocatorDiscovery.java:536)
+	at net.jini.discovery.LookupLocatorDiscovery$LocatorReg.tryGetProxy(LookupLocatorDiscovery.java:468)
+	at net.jini.discovery.LookupLocatorDiscovery.regTryGetProxy(LookupLocatorDiscovery.java:1295)
+	at net.jini.discovery.LookupLocatorDiscovery.access$1000(LookupLocatorDiscovery.java:310)
+	at net.jini.discovery.LookupLocatorDiscovery$DiscoveryTask.tryOnce(LookupLocatorDiscovery.java:727)
+	at com.sun.jini.thread.RetryTask.run(RetryTask.java:131)
+	at com.sun.jini.thread.TaskManager$TaskThread.run(TaskManager.java:331)
+

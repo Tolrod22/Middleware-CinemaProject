@@ -1,0 +1,174 @@
+mars 03, 2020 2:00:10 PM com.sun.jini.tool.ClassServer run
+INFOS: ClassServer started [[/C:/Users/Simon/Documents/Workspace/Middleware-Project/server-side/lib\], port 8065]
+mars 03, 2020 2:00:10 PM com.sun.jini.reggie.RegistrarImpl <init>
+GRAVE: Reggie initialization failed
+net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.reggie.RegistrarImpl.<init>(RegistrarImpl.java:381)
+	at com.sun.jini.reggie.TransientRegistrarImpl.<init>(TransientRegistrarImpl.java:39)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+
+mars 03, 2020 2:00:10 PM com.sun.jini.outrigger.OutriggerServerImpl unwindConstructor
+GRAVE: exception encountered while (re)starting server
+net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.outrigger.OutriggerServerImpl.<init>(OutriggerServerImpl.java:504)
+	at com.sun.jini.outrigger.OutriggerServerWrapper.<init>(OutriggerServerWrapper.java:105)
+	at com.sun.jini.outrigger.TransientOutriggerImpl.<init>(TransientOutriggerImpl.java:49)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+
+mars 03, 2020 2:00:10 PM com.sun.jini.mahalo.TxnManagerImpl initFailed
+GRAVE: Mahalo failed to initialize
+net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.mahalo.TxnManagerImpl.init(TxnManagerImpl.java:295)
+	at com.sun.jini.mahalo.TxnManagerImpl.<init>(TxnManagerImpl.java:275)
+	at com.sun.jini.mahalo.TransientMahaloImpl.<init>(TransientMahaloImpl.java:52)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Exception creating service.
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+Caused by: net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.reggie.RegistrarImpl.<init>(RegistrarImpl.java:381)
+	at com.sun.jini.reggie.TransientRegistrarImpl.<init>(TransientRegistrarImpl.java:39)
+	... 10 more
+
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Associated service descriptor [1]: [, C:\Users\Simon\.java.policy, /C:/Users/Simon/Documents/Workspace/Middleware-Project/server-side/lib/reggie-2.2.3.jar, com.sun.jini.reggie.TransientRegistrarImpl, [river.config], com.sun.jini.start.NonActivatableServiceDescriptor$1@12f40c25, BasicProxyPreparer[]]
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Exception creating service.
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+Caused by: net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.outrigger.OutriggerServerImpl.<init>(OutriggerServerImpl.java:504)
+	at com.sun.jini.outrigger.OutriggerServerWrapper.<init>(OutriggerServerWrapper.java:105)
+	at com.sun.jini.outrigger.TransientOutriggerImpl.<init>(TransientOutriggerImpl.java:49)
+	... 10 more
+
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Associated service descriptor [2]: [, C:\Users\Simon\.java.policy, /C:/Users/Simon/Documents/Workspace/Middleware-Project/server-side/lib/outrigger-2.2.3.jar, com.sun.jini.outrigger.TransientOutriggerImpl, [river.config], com.sun.jini.start.NonActivatableServiceDescriptor$1@12f40c25, BasicProxyPreparer[]]
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Exception creating service.
+java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.sun.jini.start.NonActivatableServiceDescriptor.create(NonActivatableServiceDescriptor.java:677)
+	at com.sun.jini.start.ServiceStarter.create(ServiceStarter.java:287)
+	at com.sun.jini.start.ServiceStarter.processServiceDescriptors(ServiceStarter.java:445)
+	at com.sun.jini.start.ServiceStarter.main(ServiceStarter.java:505)
+	at server.tupleSpace.River.run(River.java:100)
+	at server.tupleSpace.River.main(River.java:67)
+Caused by: net.jini.config.ConfigurationException: river.config:5: class not found: fr.ensibs.river.River
+	at net.jini.config.ConfigurationFile.oops(ConfigurationFile.java:2755)
+	at net.jini.config.ConfigurationFile.access$100(ConfigurationFile.java:384)
+	at net.jini.config.ConfigurationFile$Parser.oops(ConfigurationFile.java:1731)
+	at net.jini.config.ConfigurationFile$Parser.parseImport(ConfigurationFile.java:1315)
+	at net.jini.config.ConfigurationFile$Parser.parseSource(ConfigurationFile.java:1276)
+	at net.jini.config.ConfigurationFile$Parser.<init>(ConfigurationFile.java:1230)
+	at net.jini.config.ConfigurationFile.<init>(ConfigurationFile.java:1811)
+	at net.jini.config.ConfigurationProvider.getInstance(ConfigurationProvider.java:240)
+	at com.sun.jini.mahalo.TxnManagerImpl.init(TxnManagerImpl.java:295)
+	at com.sun.jini.mahalo.TxnManagerImpl.<init>(TxnManagerImpl.java:275)
+	at com.sun.jini.mahalo.TransientMahaloImpl.<init>(TransientMahaloImpl.java:52)
+	... 10 more
+
+mars 03, 2020 2:00:10 PM com.sun.jini.start.ServiceStarter checkResultFailures
+AVERTISSEMENT: Associated service descriptor [3]: [, C:\Users\Simon\.java.policy, /C:/Users/Simon/Documents/Workspace/Middleware-Project/server-side/lib/mahalo-2.2.3.jar, com.sun.jini.mahalo.TransientMahaloImpl, [river.config], com.sun.jini.start.NonActivatableServiceDescriptor$1@12f40c25, BasicProxyPreparer[]]
+java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:134)
+	at java.io.DataOutputStream.writeBytes(DataOutputStream.java:276)
+	at com.sun.jini.tool.ClassServer$Task.run(ClassServer.java:638)
+java.net.SocketException: Software caused connection abort: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:111)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:134)
+	at java.io.DataOutputStream.writeBytes(DataOutputStream.java:276)
+	at com.sun.jini.tool.ClassServer$Task.run(ClassServer.java:638)
