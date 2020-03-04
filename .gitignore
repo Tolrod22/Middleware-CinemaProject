@@ -1,3 +1,5 @@
 .idea/
 target/
 *.iml
+*.err
+a3servers.xml

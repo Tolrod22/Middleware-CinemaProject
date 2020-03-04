@@ -1,4 +1,4 @@
-package server.tupleSpace;
+package fr.ensibs.river;
 
 import java.net.URL;
 import java.io.File;
@@ -16,7 +16,7 @@ import net.jini.config.ConfigurationException;
 import net.jini.config.NoSuchEntryException;
 
 /**
- * Used to initialize the server.tupleSpace.River services configurations. Relies on a
+ * Used to initialize the fr.ensibs.river.River services configurations. Relies on a
  * configuration file copied in the user working directory.
  */
 public class RiverConfiguration implements Configuration {
@@ -74,7 +74,7 @@ public class RiverConfiguration implements Configuration {
 
     @Override
     public Object getEntry(String component, String name, Class type, Object defaultValue, Object data) throws NoSuchEntryException, ConfigurationException {
-        // System.out.println("server.tupleSpace.RiverConfiguration [" + component + "," + name + "," + type.getName() + "," + defaultValue + "," + data + "]");
+        // System.out.println("fr.ensibs.river.RiverConfiguration [" + component + "," + name + "," + type.getName() + "," + defaultValue + "," + data + "]");
         Object entry = getEntry(component, name, type, defaultValue);
         // System.out.println("     " + entry);
         return entry;
@@ -90,9 +90,9 @@ public class RiverConfiguration implements Configuration {
         return new ServiceDescriptor[]{
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/tools-2.2.3.jar", "com.sun.jini.tool.ClassServer", new String[]{"-port", Integer.toString(port), "-dir", base + "lib", "-verbose"}),
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/reggie-2.2.3.jar", "com.sun.jini.reggie.TransientRegistrarImpl", new String[]{CONFIG_FILE}),
-                // new server.tupleSpace.RiverConfiguration("com.sun.jini.reggie", host), null, null),
+                // new fr.ensibs.river.RiverConfiguration("com.sun.jini.reggie", host), null, null),
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/outrigger-2.2.3.jar", "com.sun.jini.outrigger.TransientOutriggerImpl", new String[]{CONFIG_FILE}),
-                // new server.tupleSpace.RiverConfiguration("com.sun.jini.outrigger", host), null, null)
+                // new fr.ensibs.river.RiverConfiguration("com.sun.jini.outrigger", host), null, null)
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/mahalo-2.2.3.jar", "com.sun.jini.mahalo.TransientMahaloImpl", new String[]{CONFIG_FILE})
         };
     }

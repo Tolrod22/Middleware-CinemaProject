@@ -1,8 +1,0 @@
-mars 04, 2020 11:16:44 AM com.sun.jini.tool.ClassServer run
-INFOS: ClassServer started [[/C:/Users/Simon/Documents/Workspace/Middleware-Project/server-side/lib\], port 8080]
-mars 04, 2020 11:17:11 AM com.sun.jini.reggie.RegistrarImpl init
-INFOS: started Reggie: 278ee24c-da62-49be-94ea-23c7b5830860, [river-group], ConstrainableLookupLocator[[jini://10.1.129.126/], [null]]
-mars 04, 2020 11:17:27 AM com.sun.jini.outrigger.OutriggerServerImpl <init>
-INFOS: Outrigger server started: com.sun.jini.outrigger.OutriggerServerImpl@612fc6eb
-mars 04, 2020 11:17:42 AM com.sun.jini.mahalo.TxnManagerImpl doInit
-INFOS: Mahalo started: com.sun.jini.mahalo.TransientMahaloImpl@43738a82

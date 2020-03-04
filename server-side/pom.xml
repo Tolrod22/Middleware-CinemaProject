@@ -6,39 +6,23 @@
 
     <groupId>fr.ensibs</groupId>
     <artifactId>server-side</artifactId>
+    <packaging>pom</packaging>
     <version>1</version>
+    <modules>
+        <module>joram-admin</module>
+        <module>joram-server</module>
+        <module>river-server</module>
+        <module>server</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <jsk.version>2.2.3</jsk.version>
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <finalName>FlightApp_Server</finalName>
-                    <archive>
-                        <manifest>
-                            <mainClass>fr.ensibs.river.River</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
             <plugin>  <!-- copy the dependencies to the lib/ directory -->
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -62,45 +46,12 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.ensibs.river.River</mainClass>
+                            <mainClass>fr.ensibs.server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.river</groupId>
-            <artifactId>start</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.river</groupId>
-            <artifactId>outrigger</artifactId>
-            <version>2.2.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.river</groupId>
-            <artifactId>tools</artifactId>
-            <version>2.2.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.river</groupId>
-            <artifactId>reggie</artifactId>
-            <version>2.2.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.river</groupId>
-            <artifactId>mahalo</artifactId>
-            <version>2.2.3</version>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
-
 
 </project>
