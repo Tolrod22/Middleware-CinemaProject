@@ -1,6 +1,8 @@
 package fr.ensibs.cinema;
 
 import fr.ensibs.RiverLookup;
+import fr.ensibs.client.Client;
+import fr.ensibs.shareable.Ticket;
 import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
@@ -8,6 +10,8 @@ import net.jini.space.JavaSpace;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.UUID;
 
 public class Cinema {
 
@@ -53,6 +57,19 @@ public class Cinema {
         this.space = new RiverLookup().lookup(host, Integer.parseInt(port), JavaSpace.class);
     }
 
+    private boolean addTickets(String movieName, int numberOfTicket) throws RemoteException, TransactionException {
+        try{
+            String masterRand = UUID.randomUUID().toString();
+            for(int i=0; i <numberOfTicket; i++){
+                Ticket ticket = new Ticket(movieName, masterRand+i, this.name, null);
+                space.write(ticket, null, 60 * 60 * 1000);
+            }
+            return true;
+        } catch (Exception e){
+            throw e;
+        }
+    }
+
     /**
      * This method is managing all the user interactions with the app.
      *
@@ -73,11 +90,19 @@ public class Cinema {
             case "GET":
                 return "Get command"; //TODO
 
-            case "add movie":
-            case "ADD movie": //TODO publish the movie added and add tickets to the shared memory
+            case "add":
+            case "ADD":
+                System.out.print("Movie name : ");
+                String movieName = scanner.nextLine();
+                //TODO publish the movie on the JMS server
+                System.out.print("How many tickets : ");
+                int places = scanner.nextInt();
+                boolean res = addTickets(movieName, places);
+                if(res) return movieName+" successfully added to the space with "+places+" tickets.";
+                else return "Error on adding "+movieName;
 
-            case "remove movie":
-            case "REMOVE movie":
+            case "remove":
+            case "REMOVE":
             default:
                 return "Error : Command error, use -h for more information"; //TODO
         }

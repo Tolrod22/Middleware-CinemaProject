@@ -18,7 +18,7 @@ public class River extends Thread {
     public static int PORT;    // the server port number
 
     private static final String DEFAULT_HOST = "localhost"; // default server host
-    private static final int DEFAULT_PORT = 8065; // default server port
+    private static final int DEFAULT_PORT = 8080; // default server port
 
     /**
      * Print a usage message and exit
