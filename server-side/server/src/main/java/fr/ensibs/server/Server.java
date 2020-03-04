@@ -16,25 +16,14 @@ public class Server {
             usage();
         }
 
-        String joramHost = DEFAULT_JORAM_HOST;
-        int joramPort = DEFAULT_JORAM_PORT;
         String riverHost = DEFAULT_RIVER_HOST;
         int riverPort = DEFAULT_RIVER_PORT;
+        String joramHost = DEFAULT_JORAM_HOST;
+        int joramPort = DEFAULT_JORAM_PORT;
 
         int idx = 0;
         while (idx < args.length - 1) {
             switch (args[idx]) {
-                case "-jh":
-                    joramHost = args[idx + 1];
-                    break;
-                case "-jp":
-                    try {
-                        joramPort = Integer.parseInt(args[idx + 1]);
-                    } catch (NumberFormatException e) {
-                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                        usage();
-                    }
-                    break;
                 case "-rh":
                     riverHost = args[idx + 1];
                     break;
@@ -46,39 +35,51 @@ public class Server {
                         usage();
                     }
                     break;
+                case "-jh":
+                    joramHost = args[idx + 1];
+                    break;
+                case "-jp":
+                    try {
+                        joramPort = Integer.parseInt(args[idx + 1]);
+                    } catch (NumberFormatException e) {
+                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                        usage();
+                    }
+                    break;
                 default:
                     usage();
             }
             idx += 2;
         }
 
+        if (joramPort == riverPort || joramPort + 1 == riverPort) {
+            usage();
+        }
+
         try {
-            Joram joram = new Joram(joramHost, joramPort);
-            joram.run();
             River river = new River(riverHost, riverPort);
             river.run();
+            Joram joram = new Joram(joramHost, joramPort);
+            joram.run();
         } catch (NumberFormatException e) {
             usage();
         }
 
         JoramAdmin admin = new JoramAdmin(joramHost, joramPort);
         admin.createTopic("Cinema");
-
     }
 
     /**
      * Print a usage message and exit
      */
     private static void usage() {
-        System.out.println("Usage: Joram [options]");
-        System.out.println("with options:");
-        System.out.println("  -jh host   the local host name (default: " + DEFAULT_JORAM_HOST + ")");
-        System.out.println("  -jp port   the server's port number (default: " + DEFAULT_JORAM_PORT + ")");
-        System.out.println("   The JNDI port number is <port_nb> and the JORAM server port number is <port+1>");
-        System.out.println("Usage: River [options]");
-        System.out.println("with options:");
-        System.out.println("  -rh host   the local host name (default: " + DEFAULT_RIVER_HOST + ")");
-        System.out.println("  -rp port   the server's port number (default: " + DEFAULT_RIVER_PORT + ")");
+        System.out.println("Usage : Server [options]");
+        System.out.println("with options :");
+        System.out.println("  -rh riverHost   the local host name for River (default : " + DEFAULT_RIVER_HOST + ")");
+        System.out.println("  -rp riverPort   the server's port number for River (default : " + DEFAULT_RIVER_PORT + ")");
+        System.out.println("  -jh joramHost   the local host name for Joram (default : " + DEFAULT_JORAM_HOST + ")");
+        System.out.println("  -jp joramPort   the server's port number for Joram (default : " + DEFAULT_JORAM_PORT + ")");
+        System.out.println("  riverPort must be diffrent than joramPort and joramPort+1");
         System.exit(-1);
     }
 }
