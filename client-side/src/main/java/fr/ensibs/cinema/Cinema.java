@@ -1,16 +1,15 @@
 package fr.ensibs.cinema;
 
 import fr.ensibs.RiverLookup;
-import fr.ensibs.client.Client;
 import fr.ensibs.shareable.Ticket;
 import net.jini.core.entry.UnusableEntryException;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.util.Scanner;
-import java.util.Timer;
 import java.util.UUID;
 
 public class Cinema {
@@ -58,16 +57,31 @@ public class Cinema {
     }
 
     private boolean addTickets(String movieName, int numberOfTicket) throws RemoteException, TransactionException {
-        try{
+        try {
             String masterRand = UUID.randomUUID().toString();
-            for(int i=0; i <numberOfTicket; i++){
-                Ticket ticket = new Ticket(movieName, masterRand+i, this.name, null);
+            for (int i = 0; i < numberOfTicket; i++) {
+                Ticket ticket = new Ticket(movieName, masterRand + i, this.name, null);
                 space.write(ticket, null, 60 * 60 * 1000);
             }
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
         }
+    }
+
+    /**
+     * @param movieName
+     * @return
+     * @throws TransactionException
+     * @throws UnusableEntryException
+     * @throws RemoteException
+     * @throws InterruptedException
+     */
+    private String removeMovie(String movieName) throws TransactionException, UnusableEntryException, RemoteException, InterruptedException {
+        Ticket template = new Ticket(movieName, null, this.name, null);
+        Ticket test = (Ticket) space.take(template, null, Lease.DURATION);
+        while (test != null) test = (Ticket) space.take(template, null, Lease.DURATION);
+        return "All your tickets for " + movieName + " were deleted";
     }
 
     /**
@@ -86,10 +100,6 @@ public class Cinema {
         String[] splited = command.split(" ");
 
         switch (splited[0]) {
-            case "get":
-            case "GET":
-                return "Get command"; //TODO
-
             case "add":
             case "ADD":
                 System.out.print("Movie name : ");
@@ -98,18 +108,21 @@ public class Cinema {
                 System.out.print("How many tickets : ");
                 int places = scanner.nextInt();
                 boolean res = addTickets(movieName, places);
-                if(res) return movieName+" successfully added to the space with "+places+" tickets.";
-                else return "Error on adding "+movieName;
+                if (res) return movieName + " successfully added to the space with " + places + " tickets.";
+                else return "Error on adding " + movieName;
 
             case "remove":
             case "REMOVE":
+                System.out.print("Movie name : ");
+                String movieToRemove = scanner.nextLine();
+                return removeMovie(movieToRemove);
             default:
                 return "Error : Command error, use -h for more information"; //TODO
         }
     }
 
     /**
-     * Main methods launching the FlightReservation app.
+     * Main methods launching the Cinema app.
      *
      * @param args The host name and the port.
      * @throws Exception

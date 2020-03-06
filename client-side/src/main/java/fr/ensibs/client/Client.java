@@ -3,9 +3,15 @@ package fr.ensibs.client;
 import fr.ensibs.RiverLookup;
 import fr.ensibs.shareable.Ticket;
 import net.jini.core.entry.UnusableEntryException;
+import net.jini.core.event.RemoteEvent;
+import net.jini.core.event.RemoteEventListener;
+import net.jini.core.event.UnknownEventException;
+import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
+import java.io.IOException;
+import java.rmi.MarshalledObject;
 import java.rmi.RemoteException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -35,6 +41,8 @@ public class Client {
 
     private ArrayList<Ticket> ticketList;
 
+    private RemoteEventListener listener = remoteEvent -> System.out.println("Coucou");
+
     /**
      * Constructor of the app instance
      *
@@ -49,6 +57,24 @@ public class Client {
         this.name = name;
         this.ticketList = new ArrayList<>();
         this.space = new RiverLookup().lookup(host, Integer.parseInt(port), JavaSpace.class);
+    }
+
+    private Ticket getTicket(String movieName, String cinemaName) throws TransactionException, UnusableEntryException, RemoteException, InterruptedException {
+        Ticket template = new Ticket(movieName, null, cinemaName, null);
+        return (Ticket) space.take(template, null, Lease.DURATION);
+    }
+
+    private void requestTicket(String movieName) throws IOException, TransactionException {
+        Ticket template = new Ticket(movieName, null, null, null);
+
+        String toMarshall = "marchall me";
+        MarshalledObject<String> mo = new MarshalledObject<>(toMarshall);
+        space.notify(template, null, new RemoteEventListener() {
+            @Override
+            public void notify(RemoteEvent remoteEvent) throws UnknownEventException, RemoteException {
+                mo.notify();
+            }
+        }, Lease.ANY, null);
     }
 
     /**
@@ -69,22 +95,38 @@ public class Client {
         switch (splited[0]) {
             case "get":
             case "GET":
-                return "Get command"; //TODO
+                System.out.print("Movie name : ");
+                String movieName = scanner.nextLine();
 
-            case "publish ticket":
-            case "PUBLISH ticket":
+                System.out.print("Cinema name : ");
+                String cinemaName = scanner.nextLine();
+
+                Ticket theTicket = getTicket(movieName, cinemaName);
+                if (theTicket != null) {
+                    theTicket.owner = this;
+                    ticketList.add(theTicket);
+                    return "You just get a ticket for " + theTicket.movieName;
+                } else {
+                    return "No ticket remaining for " + movieName;
+                }
+
+            case "publish":
+            case "PUBLISH":
                 return "publish command"; //TODO
 
-            case "request ticket":
-            case "REQUEST ticket":
-                return "request command"; //TODO
+            case "request":
+            case "REQUEST":
+                System.out.print("Movie name : ");
+                String movieRequest = scanner.nextLine();
+                requestTicket(movieRequest); //TODO
+                return "You are now requesting ticket for " + movieRequest;
             default:
                 return "Error : Command error, use -h for more information"; //TODO
         }
     }
 
     /**
-     * Main methods launching the FlightReservation app.
+     * Main methods launching the Client app.
      *
      * @param args The host name and the port.
      * @throws Exception
