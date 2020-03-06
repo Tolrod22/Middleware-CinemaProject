@@ -1,33 +1,19 @@
 package fr.ensibs.cinema;
 
-import fr.ensibs.RiverLookup;
 import fr.ensibs.shareable.Ticket;
-import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
+import javax.jms.*;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
-import java.text.ParseException;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.UUID;
 
 public class Cinema {
-
-    /**
-     * The shared JavaSpace where all the objects are stored.
-     */
-    private JavaSpace space;
-
-    /**
-     * The server host name
-     */
-    private String host;
-
-    /**
-     * The server host port
-     */
-    private int port;
 
     /**
      * The cinema name
@@ -40,21 +26,81 @@ public class Cinema {
     private String city;
 
     /**
-     * Constructor of the app instance
-     *
-     * @param host the host
-     * @param port the port
-     * @param name the name
-     * @param city the city
-     * @throws Exception Throw an exception if the connection cannot be done.
+     * The session used to send messages to the server
      */
-    public Cinema(String host, String port, String name, String city) throws Exception {
+    private final Session sessionProducer;
+
+    /**
+     * The producer used to send messages to the server
+     */
+    private final MessageProducer producer;
+
+    /**
+     * The default destination of each message
+     */
+    private final Destination destination;
+
+    /**
+     * The shared JavaSpace where all the objects are stored.
+     */
+    private JavaSpace space;
+
+    /**
+     * @param name            the cinema name
+     * @param city            the cinema city
+     * @param sessionProducer the session used to send messages to the server
+     * @param producer        the producer used to send messages to the server
+     * @param destination     the default destination of each message
+     * @param space           the JavaSpace used to share objects
+     */
+    public Cinema(String name, String city, Session sessionProducer, MessageProducer producer, Destination destination, JavaSpace space) {
         this.name = name;
         this.city = city;
-        this.host = host;
-        this.port = Integer.parseInt(port);
-        this.space = new RiverLookup().lookup(host, Integer.parseInt(port), JavaSpace.class);
+        this.sessionProducer = sessionProducer;
+        this.producer = producer;
+        this.destination = destination;
+        this.space = space;
     }
+
+    /**
+     * Launch the application process that executes user commands
+     */
+    public void run() throws Exception {
+        System.out.println("Hello, " + this.name + ". Enter commands:"
+                + "\n QUIT      to quit the application"
+                + "\n ADD       to share a new available movie"
+                + "\n REMOVE    to remove an unavailable movie");
+
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        while (!line.equals("quit") && !line.equals("QUIT")) {
+            String[] command = line.split(" +");
+            switch (command[0]) {
+                case "add":
+                case "ADD":
+                    System.out.print("Movie name : ");
+                    String movieName = scanner.nextLine();
+                    shareMovie(movieName);
+                    System.out.print("How many tickets : ");
+                    int places = scanner.nextInt();
+                    boolean res = addTickets(movieName, places);
+                    if (res)
+                        System.out.println(movieName + " successfully added to the space with " + places + " tickets.");
+                    else System.out.println("Error on adding " + movieName);
+                    break;
+                case "remove":
+                case "REMOVE":
+                    System.out.print("Movie name : ");
+                    String movieToRemove = scanner.nextLine();
+                    System.out.println(removeMovie(movieToRemove));
+                    break;
+                default:
+                    System.err.println("Unknown command: \"" + command[0] + "\"");
+            }
+            line = scanner.nextLine();
+        }
+    }
+
 
     private boolean addTickets(String movieName, int numberOfTicket) throws RemoteException, TransactionException {
         try {
@@ -72,69 +118,21 @@ public class Cinema {
     /**
      * @param movieName
      * @return
-     * @throws TransactionException
-     * @throws UnusableEntryException
-     * @throws RemoteException
-     * @throws InterruptedException
+     * @throws Exception
      */
-    private String removeMovie(String movieName) throws TransactionException, UnusableEntryException, RemoteException, InterruptedException {
+    private String removeMovie(String movieName) throws Exception {
         Ticket template = new Ticket(movieName, null, this.name, null);
         Ticket test = (Ticket) space.take(template, null, Lease.DURATION);
         while (test != null) test = (Ticket) space.take(template, null, Lease.DURATION);
         return "All your tickets for " + movieName + " were deleted";
     }
 
-    /**
-     * This method is managing all the user interactions with the app.
-     *
-     * @param command The last command used by the user.
-     * @param scanner The scanner instance.
-     * @return A response message to inform the user of the remote space evolution.
-     * @throws RemoteException
-     * @throws TransactionException
-     * @throws InterruptedException
-     * @throws UnusableEntryException
-     * @throws ParseException
-     */
-    private String manageCommand(String command, Scanner scanner) throws Exception {
-        String[] splited = command.split(" ");
+    private void shareMovie(String name) throws JMSException, IOException {
+        Message msg = sessionProducer.createMessage();
 
-        switch (splited[0]) {
-            case "add":
-            case "ADD":
-                System.out.print("Movie name : ");
-                String movieName = scanner.nextLine();
-                //TODO publish the movie on the JMS server
-                System.out.print("How many tickets : ");
-                int places = scanner.nextInt();
-                boolean res = addTickets(movieName, places);
-                if (res) return movieName + " successfully added to the space with " + places + " tickets.";
-                else return "Error on adding " + movieName;
+        msg.setStringProperty("owner", this.name);
+        msg.setStringProperty("movieName", name);
 
-            case "remove":
-            case "REMOVE":
-                System.out.print("Movie name : ");
-                String movieToRemove = scanner.nextLine();
-                return removeMovie(movieToRemove);
-            default:
-                return "Error : Command error, use -h for more information"; //TODO
-        }
-    }
-
-    /**
-     * Main methods launching the Cinema app.
-     *
-     * @param args The host name and the port.
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        Scanner input = new Scanner(System.in);
-        Cinema app = new Cinema(args[0], args[1], args[2], args[3]);
-        System.out.print("System is on, ready to be used !!!\n");
-
-        while (true) {
-            String cmd = input.nextLine();
-            System.out.println(app.manageCommand(cmd, input));
-        }
+        producer.send(msg);
     }
 }
