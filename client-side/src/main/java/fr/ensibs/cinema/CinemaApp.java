@@ -47,7 +47,7 @@ public class CinemaApp {
 
             JavaSpace space = new RiverLookup().lookup(riverHost, Integer.parseInt(riverPort), JavaSpace.class);
 
-            Cinema instance = new Cinema(cinema_name, cinema_city, sessionProducer, producer, destination, space);
+            Cinema instance = new Cinema(cinema_name, cinema_city, sessionProducer, producer, space);
             instance.run();
         } catch (Exception e) {
             e.printStackTrace();

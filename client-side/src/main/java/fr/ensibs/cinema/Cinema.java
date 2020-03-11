@@ -6,10 +6,9 @@ import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
 
 import javax.jms.*;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.rmi.RemoteException;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -36,30 +35,29 @@ public class Cinema {
     private final MessageProducer producer;
 
     /**
-     * The default destination of each message
-     */
-    private final Destination destination;
-
-    /**
      * The shared JavaSpace where all the objects are stored.
      */
     private JavaSpace space;
+
+    /**
+     * The list of movies available in the cinema
+     */
+    private List<String> availableMovies;
 
     /**
      * @param name            the cinema name
      * @param city            the cinema city
      * @param sessionProducer the session used to send messages to the server
      * @param producer        the producer used to send messages to the server
-     * @param destination     the default destination of each message
      * @param space           the JavaSpace used to share objects
      */
-    public Cinema(String name, String city, Session sessionProducer, MessageProducer producer, Destination destination, JavaSpace space) {
+    public Cinema(String name, String city, Session sessionProducer, MessageProducer producer, JavaSpace space) {
         this.name = name;
         this.city = city;
         this.sessionProducer = sessionProducer;
         this.producer = producer;
-        this.destination = destination;
         this.space = space;
+        this.availableMovies = new ArrayList<>();
     }
 
     /**
@@ -80,19 +78,32 @@ public class Cinema {
                 case "ADD":
                     System.out.print("Movie name : ");
                     String movieName = scanner.nextLine();
-                    shareMovie(movieName);
-                    System.out.print("How many tickets : ");
-                    int places = scanner.nextInt();
-                    boolean res = addTickets(movieName, places);
-                    if (res)
-                        System.out.println(movieName + " successfully added to the space with " + places + " tickets.");
-                    else System.out.println("Error on adding " + movieName);
+                    if (this.availableMovies.contains(movieName)) {
+                        System.out.println(movieName + " already available in your cinema");
+                    } else {
+                        System.out.print("Number of tickets : ");
+                        int places = scanner.nextInt();
+                        if (places > 0) {
+                            addTickets(movieName, places);
+                            shareMovie(movieName);
+                            this.availableMovies.add(movieName);
+                            System.out.println(movieName + " successfully added to the space with " + places + " tickets.");
+                        } else {
+                            System.out.println("Number of tickets must be more than 0");
+                        }
+                    }
                     break;
                 case "remove":
                 case "REMOVE":
                     System.out.print("Movie name : ");
                     String movieToRemove = scanner.nextLine();
-                    System.out.println(removeMovie(movieToRemove));
+                    if (!this.availableMovies.contains(movieToRemove)) {
+                        System.out.println(movieToRemove + " is already unavailable in your cinema");
+                    } else {
+                        removeMovie(movieToRemove);
+                        this.availableMovies.remove(movieToRemove);
+                        System.out.println(movieToRemove + " successfully removed from your cinema");
+                    }
                     break;
                 default:
                     System.err.println("Unknown command: \"" + command[0] + "\"");
@@ -101,33 +112,43 @@ public class Cinema {
         }
     }
 
-
-    private boolean addTickets(String movieName, int numberOfTicket) throws RemoteException, TransactionException {
-        try {
-            String masterRand = UUID.randomUUID().toString();
-            for (int i = 0; i < numberOfTicket; i++) {
-                Ticket ticket = new Ticket(movieName, masterRand + i, this.name, null);
-                space.write(ticket, null, 60 * 60 * 1000);
-            }
-            return true;
-        } catch (Exception e) {
-            throw e;
+    /**
+     * Method used to add tickets for an available movie
+     *
+     * @param movieName       the name of the movie
+     * @param numberOfTickets the number of tickets to add
+     * @throws RemoteException
+     * @throws TransactionException
+     */
+    private void addTickets(String movieName, int numberOfTickets) throws RemoteException, TransactionException {
+        String masterRand = UUID.randomUUID().toString();
+        for (int i = 0; i < numberOfTickets; i++) {
+            Ticket ticket = new Ticket(movieName, masterRand + i, this.name, null);
+            space.write(ticket, null, 60 * 60 * 1000);
         }
     }
 
     /**
-     * @param movieName
-     * @return
+     * Method used to remove a movie
+     *
+     * @param movieName the name of the movie to remove
      * @throws Exception
      */
-    private String removeMovie(String movieName) throws Exception {
+    private void removeMovie(String movieName) throws Exception {
         Ticket template = new Ticket(movieName, null, this.name, null);
         Ticket test = (Ticket) space.take(template, null, Lease.DURATION);
-        while (test != null) test = (Ticket) space.take(template, null, Lease.DURATION);
-        return "All your tickets for " + movieName + " were deleted";
+        while (test != null) {
+            test = (Ticket) space.take(template, null, Lease.DURATION);
+        }
     }
 
-    private void shareMovie(String name) throws JMSException, IOException {
+    /**
+     * Method used to share a movie on the JMS server
+     *
+     * @param name the name of the movie
+     * @throws JMSException
+     */
+    private void shareMovie(String name) throws JMSException {
         Message msg = sessionProducer.createMessage();
 
         msg.setStringProperty("owner", this.name);
