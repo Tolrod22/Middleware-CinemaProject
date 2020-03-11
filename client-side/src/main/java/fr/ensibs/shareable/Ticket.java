@@ -1,6 +1,5 @@
 package fr.ensibs.shareable;
 
-import fr.ensibs.client.Client;
 import net.jini.core.entry.Entry;
 
 public class Ticket implements Entry {
@@ -11,15 +10,25 @@ public class Ticket implements Entry {
 
     public String cinema;
 
-    public Client owner = null;
+    public String owner;
 
     public Ticket() {
     }
 
-    public Ticket(String movieName, String ticketId, String cinema, Client owner) {
+    public Ticket(String movieName, String ticketId, String cinema, String owner) {
         this.movieName = movieName;
         this.ticketId = ticketId;
         this.cinema = cinema;
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "movieName='" + movieName + '\'' +
+                ", ticketId='" + ticketId + '\'' +
+                ", cinema='" + cinema + '\'' +
+                ", owner='" + owner + '\'' +
+                '}';
     }
 }
