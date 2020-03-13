@@ -1,6 +1,5 @@
 .idea/
 target/
 *.iml
-*.err
-a3servers.xml
-river.config
+/logs
+/config

@@ -6,14 +6,8 @@
 
     <groupId>fr.ensibs</groupId>
     <artifactId>server-side</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>1</version>
-    <modules>
-        <module>joram-admin</module>
-        <module>joram-server</module>
-        <module>river-server</module>
-        <module>server</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,7 +17,7 @@
 
     <build>
         <plugins>
-            <plugin>  <!-- copy the dependencies to the lib/ directory -->
+            <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
@@ -37,7 +31,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>  <!-- make an executable jar with classpath to the lib/ dependencies -->
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
@@ -46,12 +40,69 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.ensibs.server.Server</mainClass>
+                            <mainClass>fr.ensibs.fr.ensibs.server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.river</groupId>
+            <artifactId>start</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.river</groupId>
+            <artifactId>outrigger</artifactId>
+            <version>2.2.3</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.river</groupId>
+            <artifactId>tools</artifactId>
+            <version>2.2.3</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.river</groupId>
+            <artifactId>reggie</artifactId>
+            <version>2.2.3</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.river</groupId>
+            <artifactId>mahalo</artifactId>
+            <version>2.2.3</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.joram</groupId>
+            <artifactId>a3-rt</artifactId>
+            <version>5.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.joram</groupId>
+            <artifactId>joram-mom-core</artifactId>
+            <version>5.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.joram</groupId>
+            <artifactId>jndi-server</artifactId>
+            <version>5.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.joram</groupId>
+            <artifactId>joram-client-jms</artifactId>
+            <version>5.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.joram</groupId>
+            <artifactId>jndi-client</artifactId>
+            <version>5.17.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
