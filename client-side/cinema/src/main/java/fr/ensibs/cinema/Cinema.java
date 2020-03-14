@@ -1,6 +1,7 @@
 package fr.ensibs.cinema;
 
 import fr.ensibs.shareable.Ticket;
+import net.jini.core.entry.Entry;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
@@ -21,11 +22,6 @@ public class Cinema {
      * The cinema name
      */
     private String name;
-
-    /**
-     * The cinema city
-     */
-    private String city;
 
     /**
      * The session used to send messages to the server
@@ -49,14 +45,12 @@ public class Cinema {
 
     /**
      * @param name            the cinema name
-     * @param city            the cinema city
      * @param sessionProducer the session used to send messages to the server
      * @param producer        the producer used to send messages to the server
      * @param space           the JavaSpace used to share objects
      */
-    public Cinema(String name, String city, Session sessionProducer, MessageProducer producer, JavaSpace space) {
+    public Cinema(String name,  Session sessionProducer, MessageProducer producer, JavaSpace space) {
         this.name = name;
-        this.city = city;
         this.sessionProducer = sessionProducer;
         this.producer = producer;
         this.space = space;
@@ -74,7 +68,7 @@ public class Cinema {
 
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
-        while (!line.equals("quit") && !line.equals("QUIT")) {
+        while (!line.equals("quit") || !line.equals("QUIT")) {
             String[] command = line.split(" +");
             switch (command[0]) {
                 case "add":
@@ -85,7 +79,12 @@ public class Cinema {
                         System.out.println(movieName + " already available in your cinema");
                     } else {
                         System.out.print("Number of tickets : ");
-                        int places = scanner.nextInt();
+                        int places = 0;
+                        try {
+                            places = Integer.parseInt(scanner.nextLine());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         if (places > 0) {
                             addTickets(movieName, places);
                             shareMovie(movieName);
@@ -126,8 +125,8 @@ public class Cinema {
     private void addTickets(String movieName, int numberOfTickets) throws RemoteException, TransactionException {
         String masterRand = UUID.randomUUID().toString();
         for (int i = 0; i < numberOfTickets; i++) {
-            Ticket ticket = new Ticket(movieName, masterRand + i, this.name, null);
-            space.write(ticket, null, 60 * 60 * 1000);
+            Entry ticket = new Ticket(movieName, masterRand + i, this.name, null);
+            this.space.write(ticket, null, Lease.FOREVER);
         }
     }
 

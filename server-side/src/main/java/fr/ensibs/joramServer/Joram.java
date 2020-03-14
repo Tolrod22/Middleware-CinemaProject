@@ -115,9 +115,7 @@ public class Joram extends Thread implements Closeable {
      * {@link #SERVER_ID} and {@link #port} properties
      */
     private void makeConfig() throws IOException {
-        File dir = new File("config");
-        dir.mkdirs();
-        File configFile = new File(dir, "a3servers.xml");
+        File configFile = new File( "a3servers.xml");
         configFile.deleteOnExit();
 
         String[] lines = {

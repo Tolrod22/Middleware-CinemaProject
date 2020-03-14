@@ -3,9 +3,7 @@ package fr.ensibs.client;
 import fr.ensibs.shareable.Ticket;
 import net.jini.core.entry.Entry;
 import net.jini.core.entry.UnusableEntryException;
-import net.jini.core.event.RemoteEvent;
 import net.jini.core.event.RemoteEventListener;
-import net.jini.core.event.UnknownEventException;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
 import net.jini.space.JavaSpace;
@@ -56,7 +54,7 @@ public class Client implements Serializable, Entry {
     private JavaSpace space;
 
     /**
-     * @param identifiant            the client name
+     * @param identifiant     the client name
      * @param sessionConsumer the session used to receive messages from the server
      * @param consumer        the consumer used to receive messages from the server
      * @param destination     the default destination of each message
@@ -124,8 +122,8 @@ public class Client implements Serializable, Entry {
                     System.out.println(ticketListToString());
                     System.out.print("Select the index of the ticket you want to publish: ");
                     int index = scanner.nextInt();
-                    if(index>=0 && index <= ticketList.size()){
-                        space.write(ticketList.get(index),null, Lease.FOREVER);
+                    if (index >= 0 && index <= ticketList.size()) {
+                        space.write(ticketList.get(index), null, Lease.FOREVER);
                         ticketList.remove(index);
                         System.out.println("Ticket successfully published");
                     } else {
@@ -136,7 +134,7 @@ public class Client implements Serializable, Entry {
                 case "REQUEST":
                     System.out.print("Movie name : ");
                     String movieRequest = scanner.nextLine();
-                    requestTicket(movieRequest, scanner);
+                    requestTicket(movieRequest);
                     System.out.println("You are now requesting ticket for " + movieRequest);
                     break;
                 case "display":
@@ -150,10 +148,10 @@ public class Client implements Serializable, Entry {
         }
     }
 
-    private String ticketListToString(){
+    private String ticketListToString() {
         StringBuilder builder = new StringBuilder();
         for (Ticket ticket : ticketList) {
-            builder.append("["+ticketList.indexOf(ticket)+"] ");
+            builder.append("[").append(ticketList.indexOf(ticket)).append("] ");
             builder.append(ticket.toString());
             builder.append("\n");
         }
@@ -165,23 +163,20 @@ public class Client implements Serializable, Entry {
         return (Ticket) space.take(template, null, Lease.DURATION);
     }
 
-    private void requestTicket(String movieName, Scanner theScanner) throws IOException, TransactionException {
+    private void requestTicket(String movieName) throws IOException, TransactionException {
         Ticket template = new Ticket(movieName, null, null, null);
-        RemoteEventListener listener = new RemoteEventListener() {
-            @Override
-            public void notify(RemoteEvent event) throws UnknownEventException, RemoteException {
-                try {
-                    Ticket tmp = (Ticket) space.read(template, null, Lease.FOREVER);
-                    if (tmp.owner != null) {
-                        Ticket tk = (Ticket) space.take(tmp, null, Lease.FOREVER);
-                        System.out.println("You get a ticket for "+tk.movieName+" from "+tk.owner);
-                        tk.owner = Client.this.identifiant;
-                        Client.this.ticketList.add(tk);
-                    }
-                } catch (Exception ex) {
-                    System.err.println("Error while taking entry");
-                    ex.printStackTrace();
+        RemoteEventListener listener = event -> {
+            try {
+                Ticket tmp = (Ticket) space.read(template, null, Lease.FOREVER);
+                if (tmp.owner != null) {
+                    Ticket tk = (Ticket) space.take(tmp, null, Lease.FOREVER);
+                    System.out.println("You get a ticket for " + tk.movieName + " from " + tk.owner);
+                    tk.owner = Client.this.identifiant;
+                    Client.this.ticketList.add(tk);
                 }
+            } catch (Exception ex) {
+                System.err.println("Error while taking entry");
+                ex.printStackTrace();
             }
         };
         RemoteEventListener stub = (RemoteEventListener) UnicastRemoteObject.exportObject(listener, 0);

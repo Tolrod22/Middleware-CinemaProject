@@ -4,15 +4,37 @@ import fr.ensibs.joramAdmin.JoramAdmin;
 import fr.ensibs.joramServer.Joram;
 import fr.ensibs.river.River;
 
+import java.util.Scanner;
+
 public class Server {
 
-    private static final String DEFAULT_RIVER_HOST = "localhost"; // default server host
-    private static final String DEFAULT_JORAM_HOST = "localhost"; // default server host
-    private static final int DEFAULT_RIVER_PORT = 8065; // default server port
-    private static final int DEFAULT_JORAM_PORT = 8066; // default server port
+    /**
+     * Default host for River host
+     */
+    private static final String DEFAULT_RIVER_HOST = "localhost";
 
+    /**
+     * Default port for River host
+     */
+    private static final String DEFAULT_JORAM_HOST = "localhost";
+
+    /**
+     * Default host for Joram host
+     */
+    private static final int DEFAULT_RIVER_PORT = 8065;
+
+    /**
+     * Default port for Joram host
+     */
+    private static final int DEFAULT_JORAM_PORT = 8066;
+
+    /**
+     * Main methods launching the Server app.
+     *
+     * @param args Nothing or -h (for help).
+     */
     public static void main(String[] args) throws Exception {
-        if (args.length % 4 != 0) {
+        if (args.length > 0 && args[0].equals("-h")) {
             usage();
         }
 
@@ -21,35 +43,28 @@ public class Server {
         String joramHost = DEFAULT_JORAM_HOST;
         int joramPort = DEFAULT_JORAM_PORT;
 
-        int idx = 0;
-        while (idx < args.length - 1) {
-            switch (args[idx]) {
-                case "-rh":
-                    riverHost = args[idx + 1];
-                    break;
-                case "-rp":
-                    try {
-                        riverPort = Integer.parseInt(args[idx + 1]);
-                    } catch (NumberFormatException e) {
-                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                        usage();
-                    }
-                    break;
-                case "-jh":
-                    joramHost = args[idx + 1];
-                    break;
-                case "-jp":
-                    try {
-                        joramPort = Integer.parseInt(args[idx + 1]);
-                    } catch (NumberFormatException e) {
-                        System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                        usage();
-                    }
-                    break;
-                default:
-                    usage();
+        try {
+            System.out.print("River host:port (press Enter for default : " + DEFAULT_RIVER_HOST + ":" + DEFAULT_RIVER_PORT + ") : ");
+            Scanner scanner = new Scanner(System.in);
+            String line = scanner.nextLine();
+
+            if (!line.equals("")) {
+                String[] command = line.split(":");
+                riverHost = command[0];
+                riverPort = Integer.parseInt(command[1]);
             }
-            idx += 2;
+
+            System.out.print("Joram host:port (press Enter for default : " + DEFAULT_JORAM_HOST + ":" + DEFAULT_JORAM_PORT + ") : ");
+            line = scanner.nextLine();
+
+            if (!line.equals("")) {
+                String[] command = line.split(":");
+                joramHost = command[0];
+                joramPort = Integer.parseInt(command[1]);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (joramPort == riverPort || joramPort + 1 == riverPort) {
@@ -73,13 +88,9 @@ public class Server {
      * Print a usage message and exit
      */
     private static void usage() {
-        System.out.println("Usage : Server [options]");
-        System.out.println("with options :");
-        System.out.println("  -rh riverHost   the local host name for River (default : " + DEFAULT_RIVER_HOST + ")");
-        System.out.println("  -rp riverPort   the server's port number for River (default : " + DEFAULT_RIVER_PORT + ")");
-        System.out.println("  -jh joramHost   the local host name for Joram (default : " + DEFAULT_JORAM_HOST + ")");
-        System.out.println("  -jp joramPort   the server's port number for Joram (default : " + DEFAULT_JORAM_PORT + ")");
-        System.out.println("  riverPort must be diffrent than joramPort and joramPort+1");
+        System.out.println("Usage : Server : runs a Joram Server and a River Server");
+        System.out.println("Settings for servers will be asked after launching");
+        System.out.println("riverPort must be diffrent than joramPort and joramPort+1");
         System.exit(-1);
     }
 }

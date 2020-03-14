@@ -1,5 +1,7 @@
 .idea/
 target/
 *.iml
-/logs
-/config
+a3servers.xml
+*.config
+logs/
+*.err

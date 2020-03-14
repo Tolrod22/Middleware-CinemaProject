@@ -40,7 +40,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.ensibs.fr.ensibs.server.Server</mainClass>
+                            <mainClass>fr.ensibs.server.Server</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

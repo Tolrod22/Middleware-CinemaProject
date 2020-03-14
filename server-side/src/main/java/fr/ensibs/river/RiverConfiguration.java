@@ -1,22 +1,18 @@
 package fr.ensibs.river;
 
-import java.net.URL;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.sun.jini.start.ServiceDescriptor;
 import com.sun.jini.start.NonActivatableServiceDescriptor;
+import com.sun.jini.start.ServiceDescriptor;
 import net.jini.config.Configuration;
 import net.jini.config.ConfigurationException;
 import net.jini.config.NoSuchEntryException;
 
+import java.io.*;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * Used to initialize the river.River services configurations. Relies on a
+ * Used to initialize the River services configurations. Relies on a
  * configuration file copied in the user working directory.
  */
 public class RiverConfiguration implements Configuration {
@@ -32,9 +28,7 @@ public class RiverConfiguration implements Configuration {
     public RiverConfiguration(String host, int port) throws Exception {
         this.entries = new HashMap<>();
 
-        File dir = new File("config");
-        dir.mkdirs();
-        File configFile = new File(dir, CONFIG_FILE);
+        File configFile = new File(CONFIG_FILE);
         configFile.deleteOnExit();
         copy(RiverConfiguration.class.getResourceAsStream("/" + CONFIG_FILE), new FileOutputStream(configFile));
 
@@ -76,7 +70,7 @@ public class RiverConfiguration implements Configuration {
 
     @Override
     public Object getEntry(String component, String name, Class type, Object defaultValue, Object data) throws NoSuchEntryException, ConfigurationException {
-        // System.out.println("river.RiverConfiguration [" + component + "," + name + "," + type.getName() + "," + defaultValue + "," + data + "]");
+        // System.out.println("RiverConfiguration [" + component + "," + name + "," + type.getName() + "," + defaultValue + "," + data + "]");
         Object entry = getEntry(component, name, type, defaultValue);
         // System.out.println("     " + entry);
         return entry;
@@ -92,9 +86,9 @@ public class RiverConfiguration implements Configuration {
         return new ServiceDescriptor[]{
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/tools-2.2.3.jar", "com.sun.jini.tool.ClassServer", new String[]{"-port", Integer.toString(port), "-dir", base + "lib", "-verbose"}),
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/reggie-2.2.3.jar", "com.sun.jini.reggie.TransientRegistrarImpl", new String[]{CONFIG_FILE}),
-                // new river.RiverConfiguration("com.sun.jini.reggie", host), null, null),
+                // new RiverConfiguration("com.sun.jini.reggie", host), null, null),
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/outrigger-2.2.3.jar", "com.sun.jini.outrigger.TransientOutriggerImpl", new String[]{CONFIG_FILE}),
-                // new river.RiverConfiguration("com.sun.jini.outrigger", host), null, null)
+                // new RiverConfiguration("com.sun.jini.outrigger", host), null, null)
                 new NonActivatableServiceDescriptor("", POLICY, base + "lib/mahalo-2.2.3.jar", "com.sun.jini.mahalo.TransientMahaloImpl", new String[]{CONFIG_FILE})
         };
     }
