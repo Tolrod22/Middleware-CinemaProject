@@ -2,7 +2,6 @@ package fr.ensibs.client;
 
 import fr.ensibs.shareable.Ticket;
 import net.jini.core.entry.Entry;
-import net.jini.core.entry.UnusableEntryException;
 import net.jini.core.event.RemoteEventListener;
 import net.jini.core.lease.Lease;
 import net.jini.core.transaction.TransactionException;
@@ -14,7 +13,6 @@ import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import java.io.IOException;
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -29,8 +27,14 @@ public class Client implements Serializable, Entry {
      */
     private String identifiant;
 
+    /**
+     * the list of tickets the user have
+     */
     private ArrayList<Ticket> ticketList;
 
+    /**
+     * the list of cinemas the user has subscribed
+     */
     private ArrayList<String> cinemas;
 
     /**
@@ -148,6 +152,11 @@ public class Client implements Serializable, Entry {
         }
     }
 
+    /**
+     * Gives the list of tickets in a String format
+     *
+     * @return the list of tickets in a String format
+     */
     private String ticketListToString() {
         StringBuilder builder = new StringBuilder();
         for (Ticket ticket : ticketList) {
@@ -158,11 +167,26 @@ public class Client implements Serializable, Entry {
         return builder.toString();
     }
 
-    private Ticket getTicket(String movieName, String cinemaName) throws TransactionException, UnusableEntryException, RemoteException, InterruptedException {
+    /**
+     * Request a ticket for a movie for a cinema on the JavaSpace server
+     *
+     * @param movieName  the movie name
+     * @param cinemaName the cinema name
+     * @return a ticket (if exists) or null
+     * @throws Exception
+     */
+    private Ticket getTicket(String movieName, String cinemaName) throws Exception {
         Ticket template = new Ticket(movieName, null, cinemaName, null);
         return (Ticket) space.take(template, null, Lease.DURATION);
     }
 
+    /**
+     * Notify the user when a ticket is available for a movie
+     *
+     * @param movieName the movie name
+     * @throws IOException
+     * @throws TransactionException
+     */
     private void requestTicket(String movieName) throws IOException, TransactionException {
         Ticket template = new Ticket(movieName, null, null, null);
         RemoteEventListener listener = event -> {
@@ -183,11 +207,23 @@ public class Client implements Serializable, Entry {
         space.notify(template, null, stub, Lease.FOREVER, null);
     }
 
+    /**
+     * Add a cinema to the filter list of cinemas
+     *
+     * @param cinemaAdded the cinema name to add
+     * @throws JMSException
+     */
     private void addFilter(String cinemaAdded) throws JMSException {
         this.cinemas.add(cinemaAdded);
         filter();
     }
 
+    /**
+     * Add a cinema from the filter list of cinemas
+     *
+     * @param cinemaRemoved the cinema name to remove
+     * @throws JMSException
+     */
     private void removeFilter(String cinemaRemoved) throws JMSException {
         this.cinemas.remove(cinemaRemoved);
         filter();
