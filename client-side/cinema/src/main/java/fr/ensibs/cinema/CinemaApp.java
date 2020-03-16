@@ -137,15 +137,8 @@ public class CinemaApp {
      * Print a usage message and exit
      */
     private static void usage() {
-        System.out.println("Usage: java Cinema <cinema_name> <cinema_city> <riverHost> <riverPort> <joramHost> <joramPort>");
-        System.out.println("Launch the cinema application");
-        System.out.println("with:");
-        System.out.println("<cinema_name>   the name of your cinema");
-        System.out.println("<cinema_city>   the city of your cinema");
-        System.out.println("<riverHost>     the name or IP address of the river server");
-        System.out.println("<riverPort>     the port numer of the river server");
-        System.out.println("<joramHost>     the name or IP address of the joram server");
-        System.out.println("<joramPort>     the port numer of the joram server");
+        System.out.println("Usage : Cinema : launches the cinema application");
+        System.out.println("Settings will be asked after launching");
         System.exit(0);
     }
 }

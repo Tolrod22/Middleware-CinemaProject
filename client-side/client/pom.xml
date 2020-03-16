@@ -36,7 +36,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.ensibs.fr.ensibs.client.ClientApp</mainClass>
+                            <mainClass>fr.ensibs.client.ClientApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
